@@ -59,6 +59,11 @@ func main() {
 	e.GET("/resource/:id", onGetResource(db))
 	e.GET("/resource/all", onGetAllResources(db))
 
+	//Assessment
+	e.POST("/assessment", onAssessmentCreate(db))
+	e.GET("/assessment/:id", onGetAssessment(db))
+	e.GET("/assessment/all", onGetAllAssessments(db))
+
 	// Start the server
 	e.Logger.Fatal(e.Start(":8080"))
 }

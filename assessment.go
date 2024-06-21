@@ -9,22 +9,24 @@ import (
 	"github.com/labstack/echo/v4"
 )
 
-type Resource struct {
+type Assessment struct {
 	Id        int    `json:"id"`
 	Title     string `json:"title"`
 	Type      string `json:"type"`
-	Url       string `json:"url"`
+	Max_score int    `json:"max_score"`
 	Course_id int    `json:"course_id"`
 }
 
-func onResourceCreate(db *sql.DB) echo.HandlerFunc {
+func onAssessmentCreate(db *sql.DB) echo.HandlerFunc {
 	return func(c echo.Context) error {
-		resource := new(Resource)
-		if err := c.Bind(resource); err != nil {
+		assessment := new(Assessment)
+		if err := c.Bind(assessment); err != nil {
 			return err
 		}
 
-		query := fmt.Sprintf("INSERT INTO resources (title, type, url, course_id) VALUES ('%s', '%s', '%s', '%d')", resource.Title, resource.Type, resource.Url, resource.Course_id)
+		fmt.Println(assessment)
+
+		query := fmt.Sprintf("INSERT INTO assessments (title, type, max_score, course_id) VALUES ('%s', '%s', '%d', '%d')", assessment.Title, assessment.Type, assessment.Max_score, assessment.Course_id)
 		_, err := db.Query(query)
 		if err != nil {
 			return err
@@ -32,26 +34,26 @@ func onResourceCreate(db *sql.DB) echo.HandlerFunc {
 
 		return c.JSON(http.StatusOK, map[string]interface{}{
 			"result":  true,
-			"message": "Resource Created Successfuly",
+			"message": "Assessment Created Successfuly",
 		})
 	}
 }
 
-func onGetAllResources(db *sql.DB) echo.HandlerFunc {
+func onGetAllAssessments(db *sql.DB) echo.HandlerFunc {
 	return func(c echo.Context) error {
-		rows, err := db.Query("SELECT * from resources")
+		rows, err := db.Query("SELECT * from assessments")
 		if err != nil {
 			return err
 		}
 		defer rows.Close()
 
-		var data []Resource
+		var data []Assessment
 
 		for rows.Next() {
-			var value Resource
+			var value Assessment
 
 			// Scan the column values into the variables
-			err = rows.Scan(&value.Id, &value.Title, &value.Type, &value.Url, &value.Course_id)
+			err = rows.Scan(&value.Id, &value.Title, &value.Type, &value.Max_score, &value.Course_id)
 			if err != nil {
 				log.Fatal(err)
 			}
@@ -65,23 +67,23 @@ func onGetAllResources(db *sql.DB) echo.HandlerFunc {
 	}
 }
 
-func onGetResource(db *sql.DB) echo.HandlerFunc {
+func onGetAssessment(db *sql.DB) echo.HandlerFunc {
 	return func(c echo.Context) error {
 		id := c.Param("id")
 
-		rows, err := db.Query("SELECT * FROM resources WHERE id = ?", id)
+		rows, err := db.Query("SELECT * FROM assessments WHERE id = ?", id)
 		if err != nil {
 			return err
 		}
 		defer rows.Close()
 
-		var data []Resource
+		var data []Assessment
 
 		for rows.Next() {
-			var value Resource
+			var value Assessment
 
 			// Scan the column values into the variables
-			err = rows.Scan(&value.Id, &value.Title, &value.Type, &value.Url, &value.Course_id)
+			err = rows.Scan(&value.Id, &value.Title, &value.Type, &value.Max_score, &value.Course_id)
 			if err != nil {
 				log.Fatal(err)
 			}

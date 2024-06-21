@@ -33,7 +33,7 @@ func onEnrollmentCreate(db *sql.DB) echo.HandlerFunc {
 
 		return c.JSON(http.StatusOK, map[string]interface{}{
 			"result":  true,
-			"message": "Course Created Successfuly",
+			"message": "Enrollment Created Successfuly",
 		})
 	}
 }
