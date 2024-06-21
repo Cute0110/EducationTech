@@ -40,12 +40,24 @@ func main() {
 	// Routes
 	e.GET("/", helloHandler)
 
+	//Auth
 	e.POST("/login", onLoginHandler(db))
 	e.POST("/signup", onSignupHandler(db))
 
+	//Course
 	e.POST("/course", onCourseCreate(db))
 	e.GET("/course/:id", onGetCourse(db))
 	e.GET("/course/all", onGetAllCourses(db))
+
+	//Enrollment
+	e.POST("/enrollment", onEnrollmentCreate(db))
+	e.GET("/enrollment/:id", onGetEnrollment(db))
+	e.GET("/enrollment/all", onGetAllEnrollments(db))
+
+	//Resource
+	e.POST("/resource", onResourceCreate(db))
+	e.GET("/resource/:id", onGetResource(db))
+	e.GET("/resource/all", onGetAllResources(db))
 
 	// Start the server
 	e.Logger.Fatal(e.Start(":8080"))
