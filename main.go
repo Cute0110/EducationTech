@@ -43,6 +43,10 @@ func main() {
 	e.POST("/login", onLoginHandler(db))
 	e.POST("/signup", onSignupHandler(db))
 
+	e.POST("/course", onCourseCreate(db))
+	e.GET("/course/:id", onGetCourse(db))
+	e.GET("/course/all", onGetAllCourses(db))
+
 	// Start the server
 	e.Logger.Fatal(e.Start(":8080"))
 }
